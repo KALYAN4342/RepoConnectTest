@@ -1,0 +1,117 @@
+public class GenerateReraAOS {
+    
+    public static void GenerateAOS(list<Opportunity> opplist){
+    
+        list<Rera_Agreement__c> aoslist = new list<Rera_Agreement__c>();
+        
+        map<id, Opportunity> mapopp = new Map<id,opportunity> ([select id, Name, Co_Applicant_Name__c,Relationship__c,Gender__c,Co_Applicant_Occupation__c,Date_of_booking__c,
+                                                                Co_Applicant_Parent_Name__c,Co_Applicant_Age__c,Co_Applicant_PAN__c,Co_Applicant_Aadhar__c,
+                                                                Account.Name,Account.Gender__c,Account.Occupation__c,Account.Billing_Street__c, Account.Billing_city__c,
+                                                                Account.Billing_state__c,Account.Billing_Postal_Code__c,Account.Billing_Country__c,Total_Receipt_Amount__c,
+                                                                Account.Street1__c,Account.City1__c,Account.Country1__c,Account.Zip_Postal_Code1__c,Account.Age__c,
+                                                                Account.State_Province__c,Account.Name_of_Father__c,Account.Relationship_Type__c, Account.PAN_No__c,Account.Aadhar__c,
+                                                                Unit_Number__r.Name,Unit_Number__r.Area_in_Sqft__c,Unit_Number__r.Carpet_Area__c,Unit_Number__r.Floor_No__c,
+                                                                Unit_Number__r.Wings__c,Unit_Number__r.UDS_in_Sq_mts__c,Unit_Number__r.UDS_in_Sq_Yds__c,Unit_Number__r.Tower_Name__c,
+                                                                Unit_Number__r.Common_Area_for_SaleDeed__c,Unit_Number__r.Service_Area_in_SFT__c, Unit_Number__r.Total__c,
+                                                                Unit_Number__r.Parking_Type__c,Unit_Number__r.Parking_Level__c,Unit_Number__r.North__c,unit_Number__r.Undivided_Share_of_Land_UDS_in_Sqft__c,
+                                                                Unit_Number__r.East__C,Unit_Number__r.West__c,Unit_Number__r.South__c,Unit_Number__r.Tower_No__c,Unit_Number__r.Tower__r.Bank_Name__c,Unit_Number__r.Tower__r.Branch_Name__c,
+                                                                Unit_Number__r.Tower__r.Proceeding_Date__c, Unit_Number__r.Tower__r.Proceeding_Number__c, Unit_Number__r.Tower__r.HMDA_Date__c, Unit_Number__r.Tower__r.HMDA_Number__c,
+                                                                Unit_Number__r.Tower__r.Name,Unit_Number__r.Tower__r.Rera_Certificate_Date__c,Unit_Number__r.Tower__r.Rera_Number__c,Unit_Number__r.Tower__r.Completion_Date__c,Unit_Number__r.Tower__r.Director_Age__c, Unit_Number__r.Tower__r.Total_Units__c,
+                                                                Project1__r.Director_Age__c,Project1__r.Director_Name__c,Project1__r.Name,Offered_Rate_including_premiums__c,
+                                                                Co_Applicant_Address__c,Total_Cost_After_Discount__c,Project1__c,Unit_Number__c from opportunity where id in : opplist]);
+        for(Opportunity O : Opplist){
+            
+                
+                Rera_Agreement__c raos = new Rera_Agreement__c();
+               	raos.Opportunity__c = o.id;
+                raos.Customer_Name__c = mapopp.get(o.id).Account.Name;
+                raos.Age__c = mapopp.get(o.id).Account.Age__c;
+            	raos.Permanent_Address__c=mapopp.get(o.id).Account.Street1__c+', '+mapopp.get(o.id).Account.City1__c+', '+mapopp.get(o.id).Account.State_Province__c+', '+mapopp.get(o.id).Account.Zip_Postal_Code1__c;
+                raos.Address__c = mapopp.get(o.id).Account.Billing_Street__c +', '+mapopp.get(o.id).Account.Billing_City__c+', '+ mapopp.get(o.id).Account.Billing_State__c +', '+mapopp.get(o.id).Account.Billing_Postal_Code__c;
+                raos.Occupation__c = mapopp.get(o.Id).Account.Occupation__c;
+                raos.Customer_PAN_Card__c = mapopp.get(o.id).Account.PAN_No__c;
+               	decimal i = mapopp.get(o.id).Account.Aadhar__c;
+                string aadhar = string.valueOf(i);
+                raos.Customer_Aadhar_Card__c = aadhar;
+                raos.Customer_Fater_parent_Name__c= mapopp.get(o.id).Account.Name_of_Father__c;
+                raos.Gender__c = mapopp.get(o.Id).Account.Gender__c;
+                raos.Co_Applicant_Name__c = o.Co_Applicant_Name__c;
+                raos.Co_Applicant_Age__c = o.Co_Applicant_Age__c;
+            	raos.Co_Applicant_Pan__c = o.Co_Applicant_PAN__c;
+            	raos.Co_Applicant_Aadhar__c = O.Co_Applicant_Aadhar__c;
+                raos.Co_Applicant_Address__c = o.Co_Applicant_Address__c;
+                raos.Co_Applicant_Occupation__c = o.Co_Applicant_Occupation__c;
+             	raos.Co_Applicant_Gender__c = O.Gender__c;
+            	raos.Amount_Received_Until_AOS__c= O.Total_Receipt_Amount__c;
+             	raos.Unit_No__c = mapopp.get(o.id).Unit_Number__r.Name;
+                raos.Saleable_Area__c = mapopp.get(o.Id).Unit_Number__r.Area_in_Sqft__c;
+                raos.Project_Name__c= mapopp.get(o.Id).Project1__r.Name;
+            	raos.HMDA_Date__c=mapopp.get(o.Id).Unit_Number__r.Tower__r.HMDA_Date__c;
+                raos.HMDA_Number__c=mapopp.get(o.Id).Unit_Number__r.Tower__r.HMDA_Number__c;
+                raos.Proceeing_Date__c=mapopp.get(o.Id).Unit_Number__r.Tower__r.Proceeding_Date__c;
+                raos.Proceeding_Number__c=mapopp.get(o.Id).Unit_Number__r.Tower__r.Proceeding_Number__c;
+                raos.Total_Units_in_Tower__c = mapopp.get(o.id).Unit_Number__r.Tower__r.Total_Units__c;
+                raos.Rera_Number__c = mapopp.get(o.Id).Unit_Number__r.Tower__r.Rera_Number__c;
+            	raos.Bank_Name__c=mapopp.get(o.id).Unit_Number__r.Tower__r.Bank_Name__c;
+            	raos.Branch_Name__c=mapopp.get(o.id).Unit_Number__r.Tower__r.Branch_Name__c;
+            	raos.Director_Age__c=mapopp.get(o.id).Unit_Number__r.Tower__r.Director_age__c;
+                raos.Completion_Date__c = mapopp.get(o.Id).Unit_Number__r.Tower__r.Completion_Date__c;
+            	raos.Rera_Certificate_Date__c=mapopp.get(o.id).Unit_Number__r.Tower__r.Rera_Certificate_Date__c;
+                raos.Block_No__c = mapopp.get(o.Id).Unit_Number__r.Tower_No__c;
+                raos.Floor__c = mapopp.get(o.Id).Unit_Number__r.Floor_No__c;
+                raos.Wing__c = mapopp.get(o.Id).Unit_Number__r.Wings__c;
+            	raos.Tower_Name__c = mapopp.get(o.id).Unit_Number__r.Tower_Name__c;
+            	raos.UDS_in_Sqft__c=mapopp.get(o.id).Unit_Number__r.UDS_in_Sq_Yds__c*9;
+				raos.Parking_Type__c = mapopp.get(o.Id).unit_Number__r.Parking_Type__c;
+                raos.Parking_Level__c = mapopp.get(o.Id).Unit_Number__r.Parking_level__c;
+                raos.Carpet_Area__c = mapopp.get(o.Id).Unit_Number__r.Carpet_Area__c;
+                raos.Co_Applicant_Father_Name__c = o.Co_Applicant_Parent_Name__c;
+            	raos.UDS_in_Sqft__c = mapopp.get(o.id).unit_Number__r.Undivided_Share_of_Land_UDS_in_Sqft__c;
+				raos.Balconies_and_Service_Area__c = mapopp.get(o.id).Unit_Number__r.Total__c;
+                raos.Common_Area__c = mapopp.get(o.Id).Unit_Number__r.Common_Area_for_SaleDeed__c;
+                raos.Area_in_Sq_Mtrs__c = mapopp.get(o.id).Unit_Number__r.UDS_in_Sq_mts__c;
+            	raos.East__c=mapopp.get(o.id).Unit_Number__r.East__c;
+            	raos.West__c=mapopp.get(o.id).Unit_Number__r.West__c;
+            	raos.North__c=mapopp.get(o.id).Unit_Number__r.North__c;
+            	raos.South__c=mapopp.get(o.id).Unit_Number__r.South__c;
+                raos.Area_in_Sq_Yds__c = mapopp.get(o.id).unit_Number__r.UDS_in_Sq_Yds__c;
+				raos.Offered_Rate__c = o.Offered_Rate_including_premiums__c;
+            	raos.Date_of_Booking__c=o.Date_of_Booking__c;
+				raos.Cost_of_Balcony_area__c = mapopp.get(o.Id).Unit_Number__r.Total__c * o.Offered_Rate_including_premiums__c;
+				raos.Cost_of_Carpet_area__c = mapopp.get(o.Id).Unit_Number__r.Carpet_Area__c * o.Offered_Rate_including_premiums__c;
+                raos.Cost_of_Common_area__c = mapopp.get(o.id).Unit_Number__r.Common_Area_for_SaleDeed__c * o.Offered_Rate_including_premiums__c;  
+                
+               if(mapopp.get(o.id).account.Gender__c=='01 Female'&& mapopp.get(o.id).Account.Relationship_Type__c=='Father'){
+                    raos.Applicant_Relationship_Tag__c= 'D/o';
+					raos.Applicant_Salutation__c='Ms.';                    
+                }
+                if(mapopp.get(o.id).account.Gender__c=='01 Female'&& mapopp.get(o.id).Account.Relationship_Type__c=='Husband'){
+                    raos.Applicant_Relationship_Tag__c= 'W/o.';
+					raos.Applicant_Salutation__c='Ms.';                    
+                }
+                if(mapopp.get(o.id).account.Gender__c=='02 Male' && mapopp.get(o.id).Account.Relationship_Type__c=='Father'){
+                    raos.Applicant_Relationship_Tag__c= 'S/o.';
+					raos.Applicant_Salutation__c='Mr.';                    
+                }
+                
+                if(o.Gender__c=='01 Female' && o.Relationship__c=='Father'){
+                   	raos.Co_Applicant_Relationship_Tag__c='D/o.';
+                   	raos.Co_Applicant_Salutation__c='Ms.';                   
+                }
+                 if(o.Gender__c=='01 Female' && o.Relationship__c=='Husband'){
+                   	raos.Co_Applicant_Relationship_Tag__c='W/o.';
+                   	raos.Co_Applicant_Salutation__c='Ms.';                   
+                }
+                 if(o.Gender__c=='02 Male' && o.Relationship__c=='Father'){
+                   	raos.Co_Applicant_Relationship_Tag__c='S/o.';
+                   	raos.Co_Applicant_Salutation__c='Mr.';                   
+                } 
+                aoslist.add(raos);
+           
+            
+        }
+        insert aoslist;
+    }
+    
+
+}
